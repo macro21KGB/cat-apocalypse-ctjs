@@ -6,7 +6,7 @@ libs:
   place:
     gridX: 1024
     gridY: 1024
-    debugMode: true
+    debugMode: false
     debugText: 0
   pointer: {}
   keyboard: {}
@@ -38,11 +38,11 @@ actions:
       - code: vkeys.Vk1
       - code: gamepad.L2
       - code: gamepad.R2
-      - code: keyboard.Space
   - name: Run
     methods:
       - code: keyboard.ShiftLeft
       - code: keyboard.KeyZ
+      - code: keyboard.Space
 scripts: []
 assets:
   - type: template
@@ -73,6 +73,7 @@ assets:
 
           if (currentFurBalls > 0) {
               templates.copy('Projectile', this.x, this.y)
+              sounds.play('ShootProjectile')
               rooms.current.fur_balls--
           }
         arguments:
@@ -83,10 +84,12 @@ assets:
           this.speed = 10
           this.default_speed = this.speed
           this.velocity_x = 0
+          this.is_dashing = false
         arguments: {}
         lib: core
       - eventKey: OnActionDown
         code: |
+          this.is_dashing = true
 
           if (rooms.current.speed_amount > 0 ) {
               this.speed = 20
@@ -98,13 +101,15 @@ assets:
           action: Run
         lib: core
       - eventKey: OnActionRelease
-        code: this.speed = this.default_speed
+        code: |-
+          this.speed = this.default_speed
+          this.is_dashing = false
         arguments:
           action: Run
         lib: core
     extends:
       cgroup: Player
-    lastmod: 1724935254934
+    lastmod: 1724974401447
     uid: wf683PRgMHJJ5Q
     behaviors: []
     extendTypes: ''
@@ -152,22 +157,28 @@ assets:
             bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1724936917135
+        lastmod: 1724974844619
         events:
           - eventKey: OnRoomStart
             code: |-
               rooms.append('UI_Layer')
-              rooms.current.fur_balls = 6
-              rooms.current.max_fur_balls = 6
-              rooms.current.speed_amount = 100
+              this.fur_balls = 6
+              this.score = 0
+              this.max_fur_balls = 6
+              this.speed_amount = 100
               sounds.play('BGM')
 
               this.restockAmmo = (amount: number) => {
-                  const newAmount = amount + rooms.current.fur_balls
-                  if (newAmount <= rooms.current.max_fur_balls && newAmount >= 0) {
-                      rooms.current.fur_balls = newAmount
+                  const newAmount = amount + this.fur_balls
+                  if (newAmount <= this.max_fur_balls && newAmount >= 0) {
+                      this.fur_balls = newAmount
                   }
               }
+
+              var me = this
+              this.addScore = (amount: number) => {
+                  me.score += amount
+              } 
 
               // timer for ammo
               this.timer1 = 2
@@ -178,19 +189,25 @@ assets:
             lib: core
           - eventKey: Timer1
             code: |
-
               this.restockAmmo(1)
-
               this.timer1 = 2
             arguments:
               name: ReplenishProjectile
               isUi: false
             lib: core
           - eventKey: Timer2
-            code: |-
-              const randomCoords = random.range(10, camera.width - 10)
+            code: >-
+              const LEFT_SPAWN_OFFSET = 40
+
+              const RIGHT_SPAWN_OFFSET = camera.width - 40
+
+
+              const randomCoords = random.range(LEFT_SPAWN_OFFSET,
+              RIGHT_SPAWN_OFFSET)
+
 
               templates.copy('Asteroid', randomCoords, -50)
+
 
               this.timer2 = 1
             arguments:
@@ -202,8 +219,7 @@ assets:
               const player = templates.list['Player'][0]
 
               // is using speed
-              if (player.default_speed == player.speed) {
-                  console.log("Replenish")
+              if (!player.is_dashing) {
                   rooms.current.speed_amount = u.clamp(0, rooms.current.speed_amount + 1, 100)
               }
             arguments: {}
@@ -246,21 +262,46 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 192.9375
-            'y': 859.375
+          - x: 1374.18757657
+            'y': 31.24159236
             opacity: 1
             tint: 16777215
             scale:
-              x: 1
-              'y': 1
+              x: 2
+              'y': 2
             rotation: 0
             uid: 3NWbqhcjDzqG2M
             exts: {}
             customProperties: {}
             bindings: {}
+          - x: 1374.33341457
+            'y': 64.09712178
+            opacity: 0.57
+            tint: '#4d4d4d'
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: z87pwn48M25tB8
+            exts: {}
+            customProperties: {}
+            bindings: {}
+            customText: Speed Meter
+          - x: 918.41272384
+            'y': 14.93165712
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 2.90333798
+              'y': 2.90333798
+            rotation: 0
+            uid: jnpR51gtbmGr4T
+            exts: {}
+            customProperties: {}
+            bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1724935810777
+        lastmod: 1724972145729
         events: []
         behaviors: []
         extendTypes: ''
@@ -443,7 +484,37 @@ assets:
     icon: help-circle
     name: utils
     lastmod: 1724672905516
-    entries: []
+    entries:
+      - type: behavior
+        name: EnemyBehavior
+        behaviorType: template
+        events: []
+        specification:
+          - structure: atomic
+            type: number
+            mappedType: number
+            name: points
+            readableName: Points Earned
+            required: true
+            fixedLength: 0
+          - structure: atomic
+            type: enum@twMjCRP336LDL3
+            mappedType: number
+            name: type
+            readableName: Asteroid Type
+            required: false
+            fixedLength: 0
+        extendTypes: ''
+        lastmod: 1724972012003
+        uid: FP3mcCNF3qj7WD
+      - name: AsteroidType
+        values:
+          - Normal
+          - Small
+          - ZigZag
+        lastmod: 1724971670698
+        type: enum
+        uid: twMjCRP336LDL3
   - type: folder
     uid: qppR1tkn5374GH
     colorClass: act
@@ -527,7 +598,7 @@ assets:
         lib: core
     extends:
       cgroup: Projectile
-    lastmod: 1724936839515
+    lastmod: 1724970186084
     uid: DddzNBt5Wh9k81
     behaviors: []
     extendTypes: ''
@@ -631,33 +702,86 @@ assets:
       - eventKey: OnStep
         lib: core
         code: |-
-          this.direction = 90
           this.rotation = this.rotation + 0.01
 
           this.move();
         arguments: {}
       - eventKey: OnCreate
         code: |-
-          this.speed = random.range(150,200)
+          this.speed = random.range(150,220)
+          this.direction = 90
+
+          // Default size
           this.setTransform(this.x, this.y, 1.5, 1.5)
+
+          const selectedType = random.enumValue(AsteroidType)
+          this.type = selectedType
+
+          switch (this.type) {
+              case AsteroidType.Normal: {
+                  this.points = 20
+                  break
+              }
+              case AsteroidType.Small: {
+                  this.setTransform(this.x,this.y, 0.9, 0.9)
+                  this.points = 10
+                  break;
+              }
+              case AsteroidType.ZigZag: {
+                  this.timer1 = 1.5
+                  this.points = 30
+              }
+          }
         arguments: {}
         lib: core
       - eventKey: OnDraw
         code: |-
-          if (this.y > camera.height) {
+          if (this.y > camera.height + this.height) {
               this.kill = true
           }
         arguments: {}
         lib: core
       - eventKey: OnDestroy
-        code: rooms.current.restockAmmo(1)
+        code: >-
+          rooms.current.restockAmmo(1)
+
+          rooms.current.addScore(this.points)
+
+
+          const hitScoreText = templates.copy('HittedScorePoint', this.x,
+          this.y) as CopyText
+
+          sounds.play('AsteroidDestroy')
+
+
+          hitScoreText.text = "+" + this.points
         arguments: {}
+        lib: core
+      - eventKey: Timer1
+        code: |-
+          // change direction randomly
+
+          if (this.direction == 110) {
+              this.direction = 70
+          } else {
+              this.direction = 110
+          }
+
+          this.timer1 = 1.5
+        arguments:
+          name: ChangeZigZagDirection
+          isUi: false
         lib: core
     extends:
       cgroup: Asteroid
-    lastmod: 1724936686610
+      Points Earned: 20
+      Asteroid Type: Normal
+      points: 20
+      type: Normal
+    lastmod: 1724972025165
     uid: gqG8CLcWP3wtz2
-    behaviors: []
+    behaviors:
+      - FP3mcCNF3qj7WD
     extendTypes: ''
   - type: template
     baseClass: AnimatedSprite
@@ -713,6 +837,199 @@ assets:
     uid: cbRr61b7Q19MPJ
     padding: 1
     isBlank: false
+  - type: template
+    baseClass: Text
+    name: UI_TEXT
+    depth: 0
+    texture: -1
+    playAnimationOnStart: false
+    loopAnimation: true
+    animationFPS: 30
+    visible: true
+    events: []
+    extends:
+      cgroup: ''
+    lastmod: 1724971024793
+    uid: z87pwn48M25tB8
+    behaviors: []
+    extendTypes: ''
+    defaultText: ''
+    textStyle: -1
+  - type: template
+    baseClass: Text
+    name: ScoreText
+    depth: 0
+    texture: -1
+    playAnimationOnStart: false
+    loopAnimation: true
+    animationFPS: 30
+    visible: true
+    events:
+      - eventKey: OnDraw
+        code: |-
+          const currentScore = rooms.current.score
+
+          this.text = currentScore
+        arguments: {}
+        lib: core
+    extends:
+      cgroup: ''
+    lastmod: 1724972084642
+    uid: jnpR51gtbmGr4T
+    behaviors: []
+    extendTypes: ''
+    defaultText: '0'
+    textStyle: -1
+  - type: template
+    baseClass: Text
+    name: HittedScorePoint
+    depth: 0
+    texture: -1
+    playAnimationOnStart: false
+    loopAnimation: true
+    animationFPS: 30
+    visible: true
+    events:
+      - eventKey: OnStep
+        lib: core
+        code: |-
+          this.direction = 270
+          this.speed = 60
+          this.move()
+
+          this.alpha -= 0.05
+
+
+          if (this.alpha <= 0) {
+              this.kill = true
+          }
+        arguments: {}
+      - eventKey: OnCreate
+        code: this.timer1 = 1
+        arguments: {}
+        lib: core
+    extends:
+      cgroup: ''
+      alpha: 0.9
+    lastmod: 1724973164749
+    uid: f33c7Bwww56NN8
+    behaviors: []
+    extendTypes: ''
+    defaultText: '+10'
+    textStyle: -1
+  - type: folder
+    uid: LK9K2WbK62TcKh
+    colorClass: act
+    icon: headphones
+    name: Sounds
+    lastmod: 1724973835367
+    entries:
+      - name: AsteroidDestroy
+        uid: cbFCjbdc5hq4qC
+        type: sound
+        lastmod: 1724974050362
+        preload: false
+        variants:
+          - uid: g3CTNN9LHhN2qj
+            source: 'C:\Users\blood\Downloads\explosion.wav'
+        distortion:
+          enabled: false
+          min: 0.3
+          max: 0.54
+        pitch:
+          enabled: false
+          min: 0.16
+          max: 0.57
+        reverb:
+          enabled: false
+          decayMin: 2
+          decayMax: 2
+          secondsMin: 2
+          secondsMax: 3
+          reverse: false
+        volume:
+          enabled: false
+          min: 1.2
+          max: 1.82
+        eq:
+          enabled: false
+          bands:
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+        panning:
+          refDistance: 0.5
+          rolloffFactor: 1
+      - name: ShootProjectile
+        uid: bd5nHjp9GjHzDQ
+        type: sound
+        lastmod: 1724974790734
+        preload: false
+        variants:
+          - uid: KdNWNhhK29fnmf
+            source: 'C:\Users\blood\Documents\Audacity\shoot.wav'
+        distortion:
+          enabled: false
+          min: 0
+          max: 1
+        pitch:
+          enabled: false
+          min: 0
+          max: 2
+        reverb:
+          enabled: false
+          decayMin: 2
+          decayMax: 2
+          secondsMin: 2
+          secondsMax: 3
+          reverse: false
+        volume:
+          enabled: false
+          min: 0
+          max: 1
+        eq:
+          enabled: false
+          bands:
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+            - min: -1
+              max: 1
+        panning:
+          refDistance: 0.5
+          rolloffFactor: 1
 globalVars: []
 settings:
   authoring:
