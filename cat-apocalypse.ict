@@ -6,7 +6,7 @@ libs:
   place:
     gridX: 1024
     gridY: 1024
-    debugMode: false
+    debugMode: true
     debugText: 0
   pointer: {}
   keyboard: {}
@@ -39,6 +39,10 @@ actions:
       - code: gamepad.L2
       - code: gamepad.R2
       - code: keyboard.Space
+  - name: Run
+    methods:
+      - code: keyboard.ShiftLeft
+      - code: keyboard.KeyZ
 scripts: []
 assets:
   - type: template
@@ -75,14 +79,32 @@ assets:
           action: Shoot
         lib: core
       - eventKey: OnCreate
-        code: |-
+        code: |
           this.speed = 10
+          this.default_speed = this.speed
           this.velocity_x = 0
         arguments: {}
         lib: core
+      - eventKey: OnActionDown
+        code: |
+
+          if (rooms.current.speed_amount > 0 ) {
+              this.speed = 20
+              rooms.current.speed_amount -= 1
+          } else {
+              this.speed = this.default_speed
+          }
+        arguments:
+          action: Run
+        lib: core
+      - eventKey: OnActionRelease
+        code: this.speed = this.default_speed
+        arguments:
+          action: Run
+        lib: core
     extends:
-      cgroup: ''
-    lastmod: 1724713539310
+      cgroup: Player
+    lastmod: 1724935254934
     uid: wf683PRgMHJJ5Q
     behaviors: []
     extendTypes: ''
@@ -116,13 +138,13 @@ assets:
         follow: -1
         backgrounds: []
         copies:
-          - x: 896
-            'y': 888
+          - x: 944
+            'y': 1080
             opacity: 1
             tint: 16777215
             scale:
-              x: 3
-              'y': 3
+              x: 2
+              'y': 2
             rotation: 0
             uid: wf683PRgMHJJ5Q
             exts: {}
@@ -130,26 +152,34 @@ assets:
             bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1724713723134
+        lastmod: 1724936917135
         events:
           - eventKey: OnRoomStart
             code: |-
               rooms.append('UI_Layer')
               rooms.current.fur_balls = 6
               rooms.current.max_fur_balls = 6
+              rooms.current.speed_amount = 100
               sounds.play('BGM')
+
+              this.restockAmmo = (amount: number) => {
+                  const newAmount = amount + rooms.current.fur_balls
+                  if (newAmount <= rooms.current.max_fur_balls && newAmount >= 0) {
+                      rooms.current.fur_balls = newAmount
+                  }
+              }
+
+              // timer for ammo
               this.timer1 = 2
-              this.timer2 = 3
+
+              // timer for asteroids
+              this.timer2 = 1
             arguments: {}
             lib: core
           - eventKey: Timer1
             code: |
-              const currentFurBalls = rooms.current.fur_balls
-              const maxFurBalls = rooms.current.max_fur_balls
 
-              if (currentFurBalls < maxFurBalls) {
-                  rooms.current.fur_balls += 1
-              }
+              this.restockAmmo(1)
 
               this.timer1 = 2
             arguments:
@@ -162,10 +192,21 @@ assets:
 
               templates.copy('Asteroid', randomCoords, -50)
 
-              this.timer2 = 3
+              this.timer2 = 1
             arguments:
               name: AsteroidSpawner
               isUi: false
+            lib: core
+          - eventKey: OnStep
+            code: |-
+              const player = templates.list['Player'][0]
+
+              // is using speed
+              if (player.default_speed == player.speed) {
+                  console.log("Replenish")
+                  rooms.current.speed_amount = u.clamp(0, rooms.current.speed_amount + 1, 100)
+              }
+            arguments: {}
             lib: core
         behaviors: []
         extendTypes: ''
@@ -205,9 +246,21 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
+          - x: 192.9375
+            'y': 859.375
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: 3NWbqhcjDzqG2M
+            exts: {}
+            customProperties: {}
+            bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1724711893935
+        lastmod: 1724935810777
         events: []
         behaviors: []
         extendTypes: ''
@@ -219,7 +272,7 @@ assets:
     name: assets
     lastmod: 1724672856405
     entries:
-      - lastmod: 1724713723146
+      - lastmod: 1724846525972
         type: texture
         name: Blue-cat
         untill: 0
@@ -228,7 +281,7 @@ assets:
           - 1
         axis:
           - 32
-          - 32
+          - 64
         marginx: 0
         marginy: 0
         imgWidth: 320
@@ -241,12 +294,28 @@ assets:
         shape: rect
         left: 32
         right: 32
-        top: 32
-        bottom: 32
+        top: 64
+        bottom: 0
         uid: BDqnkQ911Mhn9m
         padding: 1
         isBlank: false
         source: 'C:\Users\blood\Desktop\progetti\Sprites\Blue-cat.png'
+        r: 32
+        stripPoints:
+          - x: 4
+            'y': -10
+          - x: 15
+            'y': 3
+          - x: 20
+            'y': 32
+          - x: 6
+            'y': 22
+          - x: -19
+            'y': 32
+          - x: -16
+            'y': -2
+        closedStrip: true
+        symmetryStrip: false
       - lastmod: 1724614300272
         type: texture
         name: background
@@ -280,7 +349,7 @@ assets:
           flowing river. The mountains should be majestic, with snowy peaks and
           ro.webp
         tiled: true
-      - lastmod: 1724713700425
+      - lastmod: 1724847228476
         type: texture
         name: fur-ball
         untill: 0
@@ -299,11 +368,11 @@ assets:
         offx: 0
         offy: 0
         origname: iRqJzGchG6bgJbM.png
-        shape: circle
+        shape: rect
         left: 32
         right: 32
-        top: 64
-        bottom: 0
+        top: 32
+        bottom: 32
         uid: RqJzGchG6bgJbM
         padding: 1
         isBlank: false
@@ -339,7 +408,7 @@ assets:
         isBlank: false
         source: 'C:\Users\blood\Desktop\progetti\Sprites\fur-ball-single.png'
         tiled: true
-      - lastmod: 1724713713399
+      - lastmod: 1724846300813
         type: texture
         name: meteor
         untill: 0
@@ -347,8 +416,8 @@ assets:
           - 1
           - 1
         axis:
-          - 32
-          - 32
+          - 33
+          - 31
         marginx: 0
         marginy: 0
         imgWidth: 64
@@ -374,44 +443,7 @@ assets:
     icon: help-circle
     name: utils
     lastmod: 1724672905516
-    entries:
-      - type: behavior
-        name: Card
-        behaviorType: template
-        events: []
-        specification:
-          - structure: atomic
-            type: text
-            mappedType: number
-            name: cardName
-            readableName: name
-            required: true
-            fixedLength: 0
-          - structure: atomic
-            type: number
-            mappedType: number
-            name: cardPrice
-            readableName: price
-            required: true
-            fixedLength: 0
-          - structure: atomic
-            type: enum@jGRW6928kwtwdh
-            mappedType: number
-            name: cardType
-            readableName: type
-            required: true
-            fixedLength: 0
-        extendTypes: ''
-        lastmod: 1724626355387
-        uid: QfkjRKgHGTfFT3
-      - name: CardType
-        values:
-          - Attack
-          - Defense
-          - Support
-        lastmod: 1724626345932
-        type: enum
-        uid: jGRW6928kwtwdh
+    entries: []
   - type: folder
     uid: qppR1tkn5374GH
     colorClass: act
@@ -475,13 +507,12 @@ assets:
       - eventKey: OnStep
         lib: core
         code: |-
-          if (this.y >= camera.height ) {
+          if (this.y <= -50 ) {
               this.kill = true
           }
 
           const entity = place.occupied(this, "Asteroid")
           if (entity) {
-              console.log(entity)
               this.kill = true;
               if (templates.isCopy(entity))
                   entity.kill = true
@@ -489,16 +520,14 @@ assets:
           this.move();
         arguments: {}
       - eventKey: OnCreate
-        code: |
+        code: |-
           this.speed = 300
           this.direction = 270
-
-          this.anchor = new PIXI.ObservablePoint(() => {}, this, -1, -1)
         arguments: {}
         lib: core
     extends:
       cgroup: Projectile
-    lastmod: 1724713089103
+    lastmod: 1724936839515
     uid: DddzNBt5Wh9k81
     behaviors: []
     extendTypes: ''
@@ -608,15 +637,82 @@ assets:
           this.move();
         arguments: {}
       - eventKey: OnCreate
-        code: 'this.speed = random.range(150,200)'
+        code: |-
+          this.speed = random.range(150,200)
+          this.setTransform(this.x, this.y, 1.5, 1.5)
+        arguments: {}
+        lib: core
+      - eventKey: OnDraw
+        code: |-
+          if (this.y > camera.height) {
+              this.kill = true
+          }
+        arguments: {}
+        lib: core
+      - eventKey: OnDestroy
+        code: rooms.current.restockAmmo(1)
         arguments: {}
         lib: core
     extends:
       cgroup: Asteroid
-    lastmod: 1724712367498
+    lastmod: 1724936686610
     uid: gqG8CLcWP3wtz2
     behaviors: []
     extendTypes: ''
+  - type: template
+    baseClass: AnimatedSprite
+    name: SpeedBar
+    depth: 0
+    texture: cbRr61b7Q19MPJ
+    playAnimationOnStart: false
+    loopAnimation: true
+    animationFPS: 30
+    visible: true
+    events:
+      - eventKey: OnDraw
+        code: |-
+          const currentSpeedAmount = rooms.current.speed_amount
+
+          this.width = u.map(currentSpeedAmount, 0, 100, 0, this.initial_width)
+        arguments: {}
+        lib: core
+      - eventKey: OnCreate
+        code: this.initial_width = this.width
+        arguments: {}
+        lib: core
+    extends:
+      cgroup: ''
+    lastmod: 1724936117165
+    uid: 3NWbqhcjDzqG2M
+    behaviors: []
+    extendTypes: ''
+  - lastmod: 1724936113055
+    type: texture
+    name: SpeedBarBg
+    untill: 0
+    grid:
+      - 1
+      - 1
+    axis:
+      - 0
+      - 0
+    marginx: 0
+    marginy: 0
+    imgWidth: 256
+    imgHeight: 16
+    width: 256
+    height: 16
+    offx: 0
+    offy: 0
+    origname: icbRr61b7Q19MPJ.png
+    shape: rect
+    left: 0
+    right: 256
+    top: 0
+    bottom: 16
+    uid: cbRr61b7Q19MPJ
+    padding: 1
+    isBlank: false
 globalVars: []
 settings:
   authoring:
