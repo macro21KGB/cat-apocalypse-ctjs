@@ -16,7 +16,7 @@ libs:
   vkeys: {}
   random: {}
   tween: {}
-startroom: -1
+startroom: PbKdMQLrdM8M9F
 contentTypes: []
 actions:
   - name: MoveX
@@ -130,8 +130,8 @@ assets:
         diagonalGrid: false
         disableGrid: false
         simulate: true
-        width: 1920
-        height: 1080
+        width: 1793
+        height: 1025
         restrictCamera: false
         restrictMaxX: 1280
         restrictMinX: 1280
@@ -141,10 +141,21 @@ assets:
         name: Main
         backgroundColor: '#DBDBDB'
         follow: -1
-        backgrounds: []
+        backgrounds:
+          - depth: -1000
+            texture: 8cbFzkRJd4bcdH
+            shiftX: 0
+            shiftY: 0
+            parallaxX: 1
+            parallaxY: 1
+            movementX: 0
+            movementY: 0
+            scaleX: 1
+            scaleY: 1
+            repeat: no-repeat
         copies:
-          - x: 944
-            'y': 1080
+          - x: 888
+            'y': 1024
             opacity: 1
             tint: 16777215
             scale:
@@ -157,16 +168,19 @@ assets:
             bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1724974844619
+        lastmod: 1725023108397
         events:
           - eventKey: OnRoomStart
             code: |-
               rooms.append('UI_Layer')
               this.fur_balls = 6
               this.score = 0
+              this.time= 60
               this.max_fur_balls = 6
               this.speed_amount = 100
-              sounds.play('BGM')
+              sounds.play('BGM', {
+                  loop: true
+              });
 
               this.restockAmmo = (amount: number) => {
                   const newAmount = amount + this.fur_balls
@@ -185,6 +199,9 @@ assets:
 
               // timer for asteroids
               this.timer2 = 1
+
+              // time for finishing game
+              this.timer3 = 1
             arguments: {}
             lib: core
           - eventKey: Timer1
@@ -224,6 +241,19 @@ assets:
               }
             arguments: {}
             lib: core
+          - eventKey: Timer3
+            code: |-
+              this.time -= 1
+
+              if (this.time <= 0) {
+                  rooms.switch('EndRoom')
+              }
+
+              this.timer3 = 1
+            arguments:
+              name: TickTime
+              isUi: false
+            lib: core
         behaviors: []
         extendTypes: ''
         uid: wWb1rhRF6cr1gD
@@ -237,8 +267,8 @@ assets:
         diagonalGrid: false
         disableGrid: true
         simulate: true
-        width: 1920
-        height: 1080
+        width: 1793
+        height: 1025
         restrictCamera: false
         restrictMaxX: 1280
         restrictMinX: 1280
@@ -262,7 +292,7 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 1374.18757657
+          - x: 1246.18757657
             'y': 31.24159236
             opacity: 1
             tint: 16777215
@@ -274,10 +304,10 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 1374.33341457
+          - x: 1246.33341457
             'y': 64.09712178
-            opacity: 0.57
-            tint: '#4d4d4d'
+            opacity: 1
+            tint: '#ebebeb'
             scale:
               x: 1
               'y': 1
@@ -299,13 +329,190 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
+            customAnchor:
+              x: 0.5
+              'y': 0
+          - x: 939.52952499
+            'y': 126.31488497
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1.5
+              'y': 1.5
+            rotation: 0
+            uid: j9dj18JD4tmcc7
+            exts: {}
+            customProperties: {}
+            bindings: {}
+            customAnchor:
+              x: 0.5
+              'y': 0
+          - x: 878.00526297
+            'y': 131.10848711
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 0.02582788
+              'y': 0.02582788
+            rotation: 0
+            uid: Bh6kr3WGdcTMNR
+            exts: {}
+            customProperties: {}
+            bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1724972145729
+        lastmod: 1725022722386
         events: []
         behaviors: []
         extendTypes: ''
         uid: 8LMJ28JTjp8CpT
+      - type: room
+        oncreate: ''
+        onstep: ''
+        ondraw: ''
+        onleave: ''
+        gridX: 64
+        gridY: 64
+        diagonalGrid: false
+        disableGrid: false
+        simulate: true
+        width: 1280
+        height: 720
+        restrictCamera: false
+        restrictMaxX: 1280
+        restrictMinX: 1280
+        restrictMaxY: 720
+        restrictMinY: 720
+        isUi: false
+        name: EndRoom
+        backgroundColor: '#000000'
+        follow: -1
+        backgrounds: []
+        copies:
+          - x: 650
+            'y': 128
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: z87pwn48M25tB8
+            exts: {}
+            customProperties: {}
+            bindings: {}
+            customAnchor:
+              x: 0.5
+              'y': 0.5
+            customText: |-
+              You have saved the world
+                      with a score of
+          - x: 640
+            'y': 216
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 3.3333332
+              'y': 3.3333332
+            rotation: 0
+            uid: jnpR51gtbmGr4T
+            exts: {}
+            customProperties: {}
+            bindings: {}
+            customAnchor:
+              x: 0.5
+              'y': 0.5
+          - x: -128
+            'y': -64
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: jnpR51gtbmGr4T
+            exts: {}
+            customProperties: {}
+            bindings: {}
+        tiles: []
+        extends: {}
+        lastmod: 1725023260481
+        events:
+          - eventKey: OnRoomStart
+            code: this.score = 0
+            arguments: {}
+            lib: core
+        behaviors: []
+        extendTypes: ''
+        uid: WfTJcMCnzmK9PJ
+      - type: room
+        oncreate: ''
+        onstep: ''
+        ondraw: ''
+        onleave: ''
+        gridX: 64
+        gridY: 64
+        diagonalGrid: false
+        disableGrid: false
+        simulate: true
+        width: 1280
+        height: 720
+        restrictCamera: false
+        restrictMaxX: 1280
+        restrictMinX: 1280
+        restrictMaxY: 720
+        restrictMinY: 720
+        isUi: true
+        name: MainMenu
+        backgroundColor: '#242424'
+        follow: -1
+        backgrounds: []
+        copies:
+          - x: 360
+            'y': 64
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 3.3333332
+              'y': 3.3333332
+            rotation: 0
+            uid: z87pwn48M25tB8
+            exts: {}
+            customProperties: {}
+            bindings: {}
+            customText: Cat-Apocalypse
+          - x: 512
+            'y': 448
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 4
+            rotation: 0
+            uid: R7D7hQNTK4LcpH
+            exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 465.3332983
+            'y': 192
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: z87pwn48M25tB8
+            exts: {}
+            customProperties: {}
+            bindings: {}
+            customText: Are you going to save the world?
+        tiles: []
+        extends: {}
+        lastmod: 1725022993359
+        events: []
+        behaviors: []
+        extendTypes: ''
+        uid: PbKdMQLrdM8M9F
   - type: folder
     uid: h9Bh2Mgrm9wCDb
     colorClass: act
@@ -357,39 +564,6 @@ assets:
             'y': -2
         closedStrip: true
         symmetryStrip: false
-      - lastmod: 1724614300272
-        type: texture
-        name: background
-        untill: 0
-        grid:
-          - 1
-          - 1
-        axis:
-          - 0
-          - 0
-        marginx: 0
-        marginy: 0
-        imgWidth: 1792
-        imgHeight: 1024
-        width: 1792
-        height: 1024
-        offx: 0
-        offy: 0
-        origname: izW5G2n8qkF6mzF.png
-        shape: rect
-        left: 0
-        right: 1792
-        top: 0
-        bottom: 1024
-        uid: zW5G2n8qkF6mzF
-        padding: 1
-        isBlank: false
-        source: >-
-          C:\Users\blood\Downloads\DALL·E 2024-08-25 18.16.21 - A panoramic
-          pixel art scene featuring a serene landscape with mountains and a
-          flowing river. The mountains should be majestic, with snowy peaks and
-          ro.webp
-        tiled: true
       - lastmod: 1724847228476
         type: texture
         name: fur-ball
@@ -449,7 +623,7 @@ assets:
         isBlank: false
         source: 'C:\Users\blood\Desktop\progetti\Sprites\fur-ball-single.png'
         tiled: true
-      - lastmod: 1724846300813
+      - lastmod: 1725019774558
         type: texture
         name: meteor
         untill: 0
@@ -478,6 +652,117 @@ assets:
         isBlank: false
         source: 'C:\Users\blood\Desktop\progetti\Sprites\meteor.png'
         r: 32
+      - lastmod: 1725018120086
+        type: texture
+        name: sfondo
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 1792
+        imgHeight: 1024
+        width: 1792
+        height: 1024
+        offx: 0
+        offy: 0
+        origname: i8cbFzkRJd4bcdH.png
+        shape: rect
+        left: 0
+        right: 1792
+        top: 0
+        bottom: 1024
+        uid: 8cbFzkRJd4bcdH
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\blood\Downloads\sfondo.png'
+        tiled: true
+      - lastmod: 1724936113055
+        type: texture
+        name: SpeedBarBg
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 256
+        imgHeight: 16
+        width: 256
+        height: 16
+        offx: 0
+        offy: 0
+        origname: icbRr61b7Q19MPJ.png
+        shape: rect
+        left: 0
+        right: 256
+        top: 0
+        bottom: 16
+        uid: cbRr61b7Q19MPJ
+        padding: 1
+        isBlank: false
+      - lastmod: 1725019988239
+        type: texture
+        name: SmokeParticle
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 32
+        imgHeight: 32
+        width: 32
+        height: 32
+        offx: 0
+        offy: 0
+        origname: iMQNfN6N8W9fpw6.png
+        shape: rect
+        left: 0
+        right: 32
+        top: 0
+        bottom: 32
+        uid: MQNfN6N8W9fpw6
+        padding: 1
+        isBlank: false
+      - lastmod: 1725020460497
+        type: texture
+        name: simple-hourglass-icon-png
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 1146
+        imgHeight: 1920
+        width: 1146
+        height: 1920
+        offx: 0
+        offy: 0
+        origname: iMrNq5m13MF3r5g.png
+        shape: rect
+        left: 0
+        right: 1146
+        top: 0
+        bottom: 1920
+        uid: MrNq5m13MF3r5g
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\blood\Desktop\simple-hourglass-icon-png.png'
   - type: folder
     uid: pQ2qNNCpCqgf75
     colorClass: act
@@ -523,25 +808,47 @@ assets:
     lastmod: 1724673236409
     entries:
       - type: style
-        name: CardTextStyle
-        uid: GCdQD88qrk14Mj
-        typeface: RcGCQjhBtLKG6q
+        name: HittedScoreStyle
+        uid: 8Nh143MT9FPDFn
+        typeface: -1
+        font:
+          family: sans-serif
+          halign: center
+          italic: false
+          size: 22
+          weight: '400'
+          wrap: false
+          wrapPosition: 640
+          lineHeight: 29.3
+        lastmod: 1725019368485
+        fill:
+          type: '0'
+        stroke:
+          color: '#5C5C5C'
+          weight: 7
+      - type: style
+        name: ScoreStyle
+        uid: 3P4DjLqp1p4d7b
+        typeface: -1
         font:
           family: sans-serif
           halign: left
           italic: false
-          size: 14
+          size: 25
           weight: '400'
-          wrap: true
+          wrap: false
           wrapPosition: 640
-          lineHeight: .nan
+          lineHeight: 33.29
         fill:
           type: 0
           color: '#ffffff'
           color1: '#cccccc'
           color2: '#ffffff'
           gradtype: 1
-        lastmod: 1724675953964
+        lastmod: 1725019592799
+        stroke:
+          color: '#383838'
+          weight: 5
   - type: folder
     uid: 88P151W1gdw4F3
     colorClass: act
@@ -565,6 +872,23 @@ assets:
           - allInFont
         customCharset: ''
         uid: RcGCQjhBtLKG6q
+      - name: DOODLE
+        type: typeface
+        fonts:
+          - weight: '400'
+            italic: false
+            uid: M7CqkTcL5cqQ3k
+            origname: DOODLE
+        lastmod: 1725019391108
+        bitmapFont: true
+        bitmapFontSize: 16
+        bitmapFontLineHeight: 18
+        bitmapPrecision: true
+        charsets:
+          - punctuation
+          - basicLatin
+        customCharset: ''
+        uid: PcbWFbTtjhHKz4
   - type: template
     baseClass: AnimatedSprite
     name: Projectile
@@ -732,6 +1056,8 @@ assets:
                   this.points = 30
               }
           }
+
+          emitters.follow(this, "AsteroidEmitter")
         arguments: {}
         lib: core
       - eventKey: OnDraw
@@ -743,6 +1069,22 @@ assets:
         lib: core
       - eventKey: OnDestroy
         code: >-
+          if (this.y > this.height + camera.height) {
+              camera.shake += 1
+              emitters.fire('FireEmitter', this.x, this.y - 20)
+              rooms.current.addScore(-this.points)
+
+              const scoreText = templates.list['ScoreText'][0] as CopyText
+              scoreText.tint = 0xaaeeaa
+              setTimeout(() => {
+                  scoreText.tint = 0xffffff
+              }, 1000)
+
+              return;
+          }
+
+
+
           rooms.current.restockAmmo(1)
 
           rooms.current.addScore(this.points)
@@ -778,7 +1120,7 @@ assets:
       Asteroid Type: Normal
       points: 20
       type: Normal
-    lastmod: 1724972025165
+    lastmod: 1725019710817
     uid: gqG8CLcWP3wtz2
     behaviors:
       - FP3mcCNF3qj7WD
@@ -810,33 +1152,6 @@ assets:
     uid: 3NWbqhcjDzqG2M
     behaviors: []
     extendTypes: ''
-  - lastmod: 1724936113055
-    type: texture
-    name: SpeedBarBg
-    untill: 0
-    grid:
-      - 1
-      - 1
-    axis:
-      - 0
-      - 0
-    marginx: 0
-    marginy: 0
-    imgWidth: 256
-    imgHeight: 16
-    width: 256
-    height: 16
-    offx: 0
-    offy: 0
-    origname: icbRr61b7Q19MPJ.png
-    shape: rect
-    left: 0
-    right: 256
-    top: 0
-    bottom: 16
-    uid: cbRr61b7Q19MPJ
-    padding: 1
-    isBlank: false
   - type: template
     baseClass: Text
     name: UI_TEXT
@@ -849,12 +1164,12 @@ assets:
     events: []
     extends:
       cgroup: ''
-    lastmod: 1724971024793
+    lastmod: 1725022819790
     uid: z87pwn48M25tB8
     behaviors: []
     extendTypes: ''
     defaultText: ''
-    textStyle: -1
+    textStyle: 3P4DjLqp1p4d7b
   - type: template
     baseClass: Text
     name: ScoreText
@@ -874,12 +1189,12 @@ assets:
         lib: core
     extends:
       cgroup: ''
-    lastmod: 1724972084642
+    lastmod: 1725021220962
     uid: jnpR51gtbmGr4T
     behaviors: []
     extendTypes: ''
     defaultText: '0'
-    textStyle: -1
+    textStyle: 3P4DjLqp1p4d7b
   - type: template
     baseClass: Text
     name: HittedScorePoint
@@ -896,27 +1211,31 @@ assets:
           this.direction = 270
           this.speed = 60
           this.move()
-
-          this.alpha -= 0.05
-
-
-          if (this.alpha <= 0) {
-              this.kill = true
-          }
         arguments: {}
       - eventKey: OnCreate
-        code: this.timer1 = 1
+        code: |-
+          tween.add(
+              {
+                  obj: this,
+                  fields: {
+                      alpha: 0
+                  } ,
+                  duration: 450
+              }
+          ).then(() => {
+              this.kill = true
+          })
         arguments: {}
         lib: core
     extends:
       cgroup: ''
       alpha: 0.9
-    lastmod: 1724973164749
+    lastmod: 1725019517509
     uid: f33c7Bwww56NN8
     behaviors: []
     extendTypes: ''
     defaultText: '+10'
-    textStyle: -1
+    textStyle: 8Nh143MT9FPDFn
   - type: folder
     uid: LK9K2WbK62TcKh
     colorClass: act
@@ -1030,6 +1349,269 @@ assets:
         panning:
           refDistance: 0.5
           rolloffFactor: 1
+  - type: folder
+    uid: rd6Tk7D69WM8QJ
+    colorClass: act
+    icon: help-circle
+    name: Emitters
+    lastmod: 1725019783498
+    entries:
+      - name: FireEmitter
+        uid: 27886nhrGJ8pbg
+        emitters:
+          - uid: fJ7mprLFQBT4dW
+            texture: MQNfN6N8W9fpw6
+            openedTabs:
+              - texture
+              - rotation
+              - spawning
+              - velocity
+              - shape
+              - colors
+            textureBehavior: textureRandom
+            animatedSingleFramerate: 30
+            settings:
+              delay: 0
+              lifetime:
+                min: 0.5
+                max: 0.5
+              frequency: 0.008
+              spawnChance: 1
+              particlesPerWave: 1
+              emitterLifetime: 0.4
+              maxParticles: 100
+              maxSpeed: 0
+              pos:
+                x: 0
+                'y': 0
+              addAtBack: false
+              behaviors:
+                - type: alpha
+                  config:
+                    alpha:
+                      list:
+                        - value: 0
+                          time: 0
+                        - value: 1
+                          time: 0.5
+                        - value: 0
+                          time: 1
+                - type: color
+                  config:
+                    color:
+                      list:
+                        - value: BF0808
+                          time: 0
+                        - value: ED0A0A
+                          time: 0.5
+                        - value: F70000
+                          time: 1
+                - type: blendMode
+                  config:
+                    blendMode: normal
+                - type: scale
+                  config:
+                    scale:
+                      list:
+                        - value: 1
+                          time: 0
+                        - value: 0.3
+                          time: 1
+                    minMult: 1
+                - type: moveAcceleration
+                  config:
+                    minStart: 0
+                    maxStart: 0
+                    accel:
+                      x: 0
+                      'y': -992
+                    rotate: true
+                    maxSpeed: 3000
+                - type: spawnShape
+                  config:
+                    type: torus
+                    data:
+                      x: 0
+                      'y': 0
+                      radius: 80
+                      innerRadius: 50
+                      rotation: true
+                - type: rotation
+                  config:
+                    minStart: 0
+                    maxStart: 0
+                    minSpeed: 0
+                    maxSpeed: 0
+                    accel: 0
+        lastmod: 1725021426041
+        type: tandem
+      - name: AsteroidEmitter
+        uid: Tcm6nBJ5w7nf14
+        emitters:
+          - uid: fJ7mprLFQBT4dW
+            texture: MQNfN6N8W9fpw6
+            openedTabs:
+              - texture
+              - colors
+              - rotation
+              - spawning
+              - velocity
+              - shape
+            textureBehavior: textureRandom
+            animatedSingleFramerate: 30
+            settings:
+              delay: 0
+              lifetime:
+                min: 0.7
+                max: 0.5
+              frequency: 0.008
+              spawnChance: 1
+              particlesPerWave: 1
+              emitterLifetime: 0
+              maxParticles: 50
+              maxSpeed: 0
+              pos:
+                x: 0
+                'y': 0
+              addAtBack: false
+              behaviors:
+                - type: alpha
+                  config:
+                    alpha:
+                      list:
+                        - value: 0.095
+                          time: 0
+                        - value: 0.25
+                          time: 0.48809523809523814
+                        - value: 0.014999999999999986
+                          time: 1
+                      isStepped: false
+                - type: color
+                  config:
+                    color:
+                      list:
+                        - value: '787878'
+                          time: 0
+                        - value: 7A7978
+                          time: 0.48809523809523814
+                        - value: '808080'
+                          time: 1
+                - type: blendMode
+                  config:
+                    blendMode: normal
+                - type: scale
+                  config:
+                    scale:
+                      list:
+                        - value: 1
+                          time: 0
+                        - value: 0.3
+                          time: 1
+                    minMult: 1
+                - type: moveAcceleration
+                  config:
+                    minStart: 0
+                    maxStart: 0
+                    accel:
+                      x: 0
+                      'y': -1344
+                    rotate: true
+                    maxSpeed: 3000
+                - type: spawnShape
+                  config:
+                    type: torus
+                    data:
+                      x: 0
+                      'y': 0
+                      radius: 60
+                      innerRadius: 0
+                      rotation: true
+                - type: rotation
+                  config:
+                    minStart: 0
+                    maxStart: 0
+                    minSpeed: 0
+                    maxSpeed: 0
+                    accel: 0
+        lastmod: 1725021614640
+        type: tandem
+  - type: template
+    baseClass: Text
+    name: TimeText
+    depth: 0
+    texture: -1
+    playAnimationOnStart: false
+    loopAnimation: true
+    animationFPS: 30
+    visible: true
+    events:
+      - eventKey: OnDraw
+        code: |-
+          const currentTime = rooms.current.time
+
+          this.text = currentTime
+        arguments: {}
+        lib: core
+    extends:
+      cgroup: ''
+    lastmod: 1725021218845
+    uid: j9dj18JD4tmcc7
+    behaviors: []
+    extendTypes: ''
+    defaultText: '60'
+    textStyle: 3P4DjLqp1p4d7b
+  - type: template
+    baseClass: AnimatedSprite
+    name: HourGlass
+    depth: 0
+    texture: MrNq5m13MF3r5g
+    playAnimationOnStart: false
+    loopAnimation: true
+    animationFPS: 30
+    visible: true
+    events:
+      - eventKey: OnStep
+        lib: core
+        code: this.move();
+        arguments: {}
+    extends:
+      cgroup: ''
+    lastmod: 1725020510722
+    uid: Bh6kr3WGdcTMNR
+    behaviors: []
+    extendTypes: ''
+  - type: template
+    baseClass: Button
+    name: StartButton
+    depth: 0
+    texture: cbRr61b7Q19MPJ
+    playAnimationOnStart: false
+    loopAnimation: true
+    animationFPS: 30
+    visible: true
+    events:
+      - eventKey: OnPointerClick
+        code: rooms.switch('Main')
+        arguments: {}
+        lib: core
+    extends:
+      cgroup: ''
+    lastmod: 1725022816406
+    uid: R7D7hQNTK4LcpH
+    behaviors: []
+    extendTypes: ''
+    defaultText: Start
+    textStyle: 3P4DjLqp1p4d7b
+    nineSliceSettings:
+      top: 16
+      left: 16
+      bottom: 16
+      right: 16
+      autoUpdate: false
+    hoverTexture: -1
+    pressedTexture: -1
+    disabledTexture: -1
+    useBitmapText: false
 globalVars: []
 settings:
   authoring:
@@ -1074,14 +1656,14 @@ settings:
       script: false
       enum: false
   branding:
-    accent: '#446adb'
+    accent: '#446ADB'
     invertPreloaderScheme: true
     icon: -1
     splashScreen: -1
     forceSmoothIcons: false
     forceSmoothSplashScreen: false
-    hideLoadingLogo: false
+    hideLoadingLogo: true
     alternativeLogo: false
-    customLoadingText: ''
+    customLoadingText: ' '
   fps: 30
 palette: []
