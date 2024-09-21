@@ -1,5 +1,5 @@
 ctjsVersion: 5.1.0
-backups: 3
+backups: 1
 language: typescript
 notes: /* empty */
 libs:
@@ -130,8 +130,8 @@ assets:
         diagonalGrid: false
         disableGrid: false
         simulate: true
-        width: 1793
-        height: 1025
+        width: 1920
+        height: 1080
         restrictCamera: false
         restrictMaxX: 1280
         restrictMinX: 1280
@@ -150,12 +150,12 @@ assets:
             parallaxY: 1
             movementX: 0
             movementY: 0
-            scaleX: 1
-            scaleY: 1
+            scaleX: 1.078
+            scaleY: 1.1
             repeat: no-repeat
         copies:
-          - x: 888
-            'y': 1024
+          - x: 952
+            'y': 1080
             opacity: 1
             tint: 16777215
             scale:
@@ -168,7 +168,7 @@ assets:
             bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1725023108397
+        lastmod: 1725037029763
         events:
           - eventKey: OnRoomStart
             code: |-
@@ -178,6 +178,7 @@ assets:
               this.time= 60
               this.max_fur_balls = 6
               this.speed_amount = 100
+
               sounds.play('BGM', {
                   loop: true
               });
@@ -246,6 +247,8 @@ assets:
               this.time -= 1
 
               if (this.time <= 0) {
+                  localStorage.score = this.score
+                  sounds.stop("BGM")
                   rooms.switch('EndRoom')
               }
 
@@ -267,8 +270,8 @@ assets:
         diagonalGrid: false
         disableGrid: true
         simulate: true
-        width: 1793
-        height: 1025
+        width: 1920
+        height: 1080
         restrictCamera: false
         restrictMaxX: 1280
         restrictMinX: 1280
@@ -292,7 +295,7 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 1246.18757657
+          - x: 1374.18757657
             'y': 31.24159236
             opacity: 1
             tint: 16777215
@@ -304,7 +307,7 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 1246.33341457
+          - x: 1374.33341457
             'y': 64.09712178
             opacity: 1
             tint: '#ebebeb'
@@ -317,7 +320,7 @@ assets:
             customProperties: {}
             bindings: {}
             customText: Speed Meter
-          - x: 918.41272384
+          - x: 960
             'y': 14.93165712
             opacity: 1
             tint: 16777215
@@ -332,8 +335,8 @@ assets:
             customAnchor:
               x: 0.5
               'y': 0
-          - x: 939.52952499
-            'y': 126.31488497
+          - x: 977.77952499
+            'y': 124.06488497
             opacity: 1
             tint: 16777215
             scale:
@@ -344,11 +347,8 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-            customAnchor:
-              x: 0.5
-              'y': 0
-          - x: 878.00526297
-            'y': 131.10848711
+          - x: 916.25526297
+            'y': 128.85848711
             opacity: 1
             tint: 16777215
             scale:
@@ -361,7 +361,7 @@ assets:
             bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1725022722386
+        lastmod: 1725034600673
         events: []
         behaviors: []
         extendTypes: ''
@@ -376,8 +376,8 @@ assets:
         diagonalGrid: false
         disableGrid: false
         simulate: true
-        width: 1280
-        height: 720
+        width: 1920
+        height: 1080
         restrictCamera: false
         restrictMaxX: 1280
         restrictMinX: 1280
@@ -385,17 +385,17 @@ assets:
         restrictMinY: 720
         isUi: false
         name: EndRoom
-        backgroundColor: '#000000'
+        backgroundColor: '#0F0F0F'
         follow: -1
         backgrounds: []
         copies:
-          - x: 650
-            'y': 128
+          - x: 966.37500017
+            'y': 302.00000002
             opacity: 1
             tint: 16777215
             scale:
-              x: 1
-              'y': 1
+              x: 3
+              'y': 3
             rotation: 0
             uid: z87pwn48M25tB8
             exts: {}
@@ -405,15 +405,15 @@ assets:
               x: 0.5
               'y': 0.5
             customText: |-
-              You have saved the world
-                      with a score of
-          - x: 640
-            'y': 216
+              You have saved the dinosaurs
+                          with a score of
+          - x: 960
+            'y': 504.3333346
             opacity: 1
             tint: 16777215
             scale:
-              x: 3.3333332
-              'y': 3.3333332
+              x: 5.03508765
+              'y': 5.03508765
             rotation: 0
             uid: jnpR51gtbmGr4T
             exts: {}
@@ -434,12 +434,63 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
+          - x: 896
+            'y': 576
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: 57tjQtntPdzprJ
+            exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 1024
+            'y': 576
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: 57tjQtntPdzprJ
+            exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 800
+            'y': 882.5263158
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1.25
+              'y': 4.21052631
+            rotation: 0
+            uid: R7D7hQNTK4LcpH
+            exts: {}
+            customProperties: {}
+            bindings: {}
+            customText: Restart
         tiles: []
         extends: {}
-        lastmod: 1725023260481
+        lastmod: 1725037087365
         events:
           - eventKey: OnRoomStart
-            code: this.score = 0
+            code: |-
+              sounds.stop()
+
+              if ("score" in localStorage) {
+                  this.score = localStorage.score
+              } else {
+                  this.score = 0
+              }
+            arguments: {}
+            lib: core
+          - eventKey: OnRoomEnd
+            code: |-
+              if ("score" in localStorage) {
+                  localStorage.removeItem("score")
+              }
             arguments: {}
             lib: core
         behaviors: []
@@ -455,8 +506,8 @@ assets:
         diagonalGrid: false
         disableGrid: false
         simulate: true
-        width: 1280
-        height: 720
+        width: 1920
+        height: 1080
         restrictCamera: false
         restrictMaxX: 1280
         restrictMinX: 1280
@@ -468,8 +519,8 @@ assets:
         follow: -1
         backgrounds: []
         copies:
-          - x: 360
-            'y': 64
+          - x: 960
+            'y': 128
             opacity: 1
             tint: 16777215
             scale:
@@ -480,8 +531,11 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
+            customAnchor:
+              x: 0.5
+              'y': 0.5
             customText: Cat-Apocalypse
-          - x: 512
+          - x: 832
             'y': 448
             opacity: 1
             tint: 16777215
@@ -493,7 +547,7 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 465.3332983
+          - x: 960
             'y': 192
             opacity: 1
             tint: 16777215
@@ -505,10 +559,60 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
+            customAnchor:
+              x: 0.5
+              'y': 0.5
             customText: Are you going to save the world?
+          - x: 192
+            'y': 704
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1.5
+              'y': 1.5
+            rotation: 0
+            uid: z87pwn48M25tB8
+            exts: {}
+            customProperties: {}
+            bindings: {}
+            customText: |-
+              Destroy the Asteroids with your
+              yarn balls and save the dinosaurs
+              from extinction
+          - x: 1088
+            'y': 704
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1.5
+              'y': 1.5
+            rotation: 0
+            uid: z87pwn48M25tB8
+            exts: {}
+            customProperties: {}
+            bindings: {}
+            customText: |-
+              Move with WASD and increase your
+              speed with SPACE
+          - x: 1088
+            'y': 832
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1.5
+              'y': 1.5
+            rotation: 0
+            uid: z87pwn48M25tB8
+            exts: {}
+            customProperties: {}
+            bindings: {}
+            customText: |-
+              Shoot with LMB (Left Mouse Button)
+
+              Enjoy :)
         tiles: []
         extends: {}
-        lastmod: 1725022993359
+        lastmod: 1725037032229
         events: []
         behaviors: []
         extendTypes: ''
@@ -1075,7 +1179,7 @@ assets:
               rooms.current.addScore(-this.points)
 
               const scoreText = templates.list['ScoreText'][0] as CopyText
-              scoreText.tint = 0xaaeeaa
+              scoreText.tint = 0xAA0000
               setTimeout(() => {
                   scoreText.tint = 0xffffff
               }, 1000)
@@ -1120,7 +1224,7 @@ assets:
       Asteroid Type: Normal
       points: 20
       type: Normal
-    lastmod: 1725019710817
+    lastmod: 1726777360953
     uid: gqG8CLcWP3wtz2
     behaviors:
       - FP3mcCNF3qj7WD
@@ -1612,18 +1716,38 @@ assets:
     pressedTexture: -1
     disabledTexture: -1
     useBitmapText: false
+  - type: template
+    baseClass: Container
+    name: FireDecoration
+    depth: 0
+    texture: -1
+    playAnimationOnStart: false
+    loopAnimation: true
+    animationFPS: 30
+    visible: true
+    events:
+      - eventKey: OnCreate
+        code: 'emitters.fire(''AsteroidEmitter'', this.x, this.y)'
+        arguments: {}
+        lib: core
+    extends:
+      cgroup: ''
+    lastmod: 1725035307389
+    uid: 57tjQtntPdzprJ
+    behaviors: []
+    extendTypes: ''
 globalVars: []
 settings:
   authoring:
-    author: ''
+    author: macro21KGB
     site: ''
-    title: ''
+    title: Cat-Apocalypse
     version:
-      - 0
+      - 1
       - 0
       - 0
     versionPostfix: ''
-    appId: ''
+    appId: it.macro21kgb.catapocalypse
   rendering:
     usePixiLegacy: true
     transparent: false
@@ -1656,13 +1780,13 @@ settings:
       script: false
       enum: false
   branding:
-    accent: '#446ADB'
+    accent: '#3758B3'
     invertPreloaderScheme: true
     icon: -1
     splashScreen: -1
     forceSmoothIcons: false
     forceSmoothSplashScreen: false
-    hideLoadingLogo: true
+    hideLoadingLogo: false
     alternativeLogo: false
     customLoadingText: ' '
   fps: 30
